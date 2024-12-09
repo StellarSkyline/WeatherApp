@@ -53,14 +53,14 @@ fun InputText(
         trailingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = "Searc Icon",
+                contentDescription = "Search Icon",
                 tint = Color.Black
             )
         },
         singleLine = true,
         textStyle = TextStyle(
             fontSize = 18.sp,
-            color = MaterialTheme.colorScheme.onBackground
+            color = ProjectColors.black
         ),
         enabled = enabled,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),

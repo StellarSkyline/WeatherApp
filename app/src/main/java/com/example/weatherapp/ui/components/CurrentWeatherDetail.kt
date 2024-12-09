@@ -62,21 +62,21 @@ fun CurrentWeatherDetail(
         Row {
             Text(
                 text = location.name,
-                color = Color.Black,
+                color = ProjectColors.black,
                 fontSize = 30.sp,
                 textAlign = TextAlign.Center,
             )
             Icon(
                 imageVector = Icons.Filled.LocationOn,
                 contentDescription = "Location Icon",
-                tint = Color.Black
+                tint = ProjectColors.black
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = " ${weather.temp_f.toInt()}°",
-            color = Color.Black,
+            color = ProjectColors.black,
             fontSize = 70.sp,
             textAlign = TextAlign.Center
         )

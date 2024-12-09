@@ -21,4 +21,12 @@ class WeatherRepoImpl(
             return WeatherDTO()
         }
     }
+
+    override suspend fun getItem(key: String): String? {
+        return userPreferences.getItem(key)
+    }
+
+    override suspend fun storeItem(key: String, value: String) {
+        userPreferences.saveItem(key, value)
+    }
 }
