@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    //Parcelize custom data classes for SavedStateHandle Stateflow handling
+    id("kotlin-parcelize")
 }
 
 android {
@@ -48,8 +50,6 @@ dependencies {
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.48")
-    implementation(libs.androidx.navigation.common.ktx)
-    implementation(libs.androidx.navigation.runtime.ktx)
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     //HiltViewModel
     kapt("androidx.hilt:hilt-compiler:1.0.0-alpha03")
@@ -58,6 +58,11 @@ dependencies {
     //Navigation Compose
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation(libs.androidx.navigation.common.ktx)
+    implementation(libs.androidx.navigation.runtime.ktx)
+
+    //ConstraintLayout Compose
+    implementation(libs.androidx.constraintlayout.compose.android)
 
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

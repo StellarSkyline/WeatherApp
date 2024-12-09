@@ -1,10 +1,13 @@
 package com.example.weatherapp.domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 data class WeatherDTO(
     val current: Current = Current(),
     val location: Location = Location()
 )
-
+@Parcelize
 data class Location(
     val country: String = "",
     val lat: Double = 0.0,
@@ -14,8 +17,9 @@ data class Location(
     val name: String = "",
     val region: String = "",
     val tz_id: String = ""
-)
+): Parcelable
 
+@Parcelize
 data class Current(
     val cloud: Int = 0,
     val condition: Condition = Condition(),
@@ -46,10 +50,11 @@ data class Current(
     val wind_mph: Double = 0.0,
     val windchill_c: Double = 0.0,
     val windchill_f: Double = 0.0
-)
+): Parcelable
 
+@Parcelize
 data class Condition(
     val code: Int = 0,
     val icon: String = "",
     val text: String = ""
-)
+): Parcelable
