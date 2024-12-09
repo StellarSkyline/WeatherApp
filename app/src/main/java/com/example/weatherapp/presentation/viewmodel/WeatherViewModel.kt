@@ -23,6 +23,8 @@ class WeatherViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    //TODO: Add Search API Functionality
+
     //UI States
     val currentWeatherState = savedStateHandle.getStateFlow("currentWeatherState", Current())
     val currentLocationState = savedStateHandle.getStateFlow("currentLocationState", Location())
