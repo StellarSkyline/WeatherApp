@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 data class WeatherDTO(
-    val current: Current = Current(),
-    val location: Location = Location()
+    val current: Current? = Current(),
+    val location: Location? = Location()
 )
 @Parcelize
 data class Location(

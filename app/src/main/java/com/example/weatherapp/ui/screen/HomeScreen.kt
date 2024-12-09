@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.presentation.viewmodel.WeatherViewModel
 import com.example.weatherapp.ui.components.CurrentWeatherDetail
-import com.example.weatherapp.ui.components.EmptyLocation
+import com.example.weatherapp.ui.components.EmptyLayout
 import com.example.weatherapp.ui.components.IncludeSpinner
 import com.example.weatherapp.ui.components.InputText
 
@@ -25,7 +25,6 @@ fun HomeScreen(
     vm: WeatherViewModel,
     onNavigate: (String) -> Unit = {}
 ) {
-
     //States
     val currentWeather by vm.currentWeatherState.collectAsStateWithLifecycle()
     val currentLocation by vm.currentLocationState.collectAsStateWithLifecycle()
@@ -91,16 +90,14 @@ fun HomeScreen(
             enabled = true,
             onAction = {
                 vm.getCurrentWeather(cityState)
-                Log.d("STLog", "Searched City: $currentWeather")
             },
             onValueChanged = {
                 vm.changeCurrentCityState(it)
             }
         )
 
-        //Logic for spinner
+        //State Module Logic
         when (uiState) {
-
             StateValues.Loading -> {
                 IncludeSpinner(modifier = Modifier.layoutId("includeSpinner"))
             }
@@ -112,16 +109,22 @@ fun HomeScreen(
                 )
             }
             StateValues.Empty -> {
-                EmptyLocation(
+                EmptyLayout(
                     modifier = Modifier.layoutId("emptyLocation")
                 )
-
             }
-
+            StateValues.Error -> {
+                EmptyLayout(
+                    modifier = Modifier.layoutId("emptyLocation"),
+                    text = "No City Found"
+                )
+            }
+            StateValues.NoConnectivity -> {
+                EmptyLayout(
+                    modifier = Modifier.layoutId("emptyLocation"),
+                    text = "No Access to Internet"
+                )
+            }
         }
-
-
     }
-
-
 }

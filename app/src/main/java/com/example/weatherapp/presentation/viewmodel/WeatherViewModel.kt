@@ -9,6 +9,8 @@ import com.example.weatherapp.domain.Current
 import com.example.weatherapp.domain.Location
 import com.example.weatherapp.domain.WeatherRepo
 import com.example.weatherapp.presentation.states.StateValues
+import com.example.weatherapp.utils.ConnectionState
+import com.example.weatherapp.utils.currentConnectivityState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +28,7 @@ class WeatherViewModel @Inject constructor(
     val currentLocationState = savedStateHandle.getStateFlow("currentLocationState", Location())
     val uiState = savedStateHandle.getStateFlow("uiState", StateValues.Loading)
     val cityState = savedStateHandle.getStateFlow("cityState", "")
+    val savedData = savedStateHandle.getStateFlow("savedData", mutableListOf<String>())
 
     //DataStore Key
     private val key: String = "saved_weather"
@@ -33,9 +36,18 @@ class WeatherViewModel @Inject constructor(
     //User State handling
     fun changeCurrentCityState(city: String) { savedStateHandle["cityState"] = city }
 
-    //Init
+    //Init - Handle No Network Connection and Check DataStore for location
     init {
-        checkDataStore()
+        Log.d("STLog", "${app.currentConnectivityState}")
+        when (app.currentConnectivityState) {
+            ConnectionState.Available -> {
+                checkDataStore()
+            }
+
+            ConnectionState.Unavailable -> {
+                savedStateHandle["uiState"] = StateValues.NoConnectivity
+            }
+        }
     }
 
     //Function Calls
@@ -43,20 +55,23 @@ class WeatherViewModel @Inject constructor(
         savedStateHandle["uiState"] = StateValues.Loading
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCurrentWeather(city).let { response ->
+                Log.d("STLog", "Response: ${response.current}")
                 if (response.current != null) {
                     savedStateHandle["currentWeatherState"] = response.current
                     savedStateHandle["currentLocationState"] = response.location
                     repo.storeItem(key, city) // Saved to DataStore
                     savedStateHandle["uiState"] = StateValues.Success
+                } else {
+                    //Show "No City Found Error"
+                    savedStateHandle["uiState"] = StateValues.Error
                 }
 
             }
         }
     }
 
-
-    //Check Data Store upon initalization of ViewModel,
-    // if there's an item immedietly call getCurrentWeather() api call
+    //Check Data Store upon initialization of ViewModel,
+    // if there's an item immediately call getCurrentWeather() api call
     private fun checkDataStore() {
         viewModelScope.launch(Dispatchers.IO) {
             val savedData = repo.getItem(key)
@@ -69,5 +84,4 @@ class WeatherViewModel @Inject constructor(
             }
         }
     }
-
 }

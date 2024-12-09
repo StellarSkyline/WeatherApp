@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.example.weatherapp.data.ProjectColors
 
 @Composable
-fun EmptyLocation(
+fun EmptyLayout(
     modifier: Modifier = Modifier,
     text: String = "No City Selected"
 ) {

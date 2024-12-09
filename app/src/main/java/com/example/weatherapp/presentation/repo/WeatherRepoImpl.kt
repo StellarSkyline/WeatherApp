@@ -16,17 +16,15 @@ class WeatherRepoImpl(
         if (response.isSuccessful) {
             return response.body()!!
         } else {
-            //return empty weather DTO
+            //return null weather DTO
             Log.d("STLog", "Error: ${response.errorBody()}")
-            return WeatherDTO()
+            return WeatherDTO(null, null)
         }
     }
-
-    override suspend fun getItem(key: String): String? {
-        return userPreferences.getItem(key)
-    }
+    override suspend fun getItem(key: String): String? = userPreferences.getItem(key)
 
     override suspend fun storeItem(key: String, value: String) {
         userPreferences.saveItem(key, value)
     }
+
 }
