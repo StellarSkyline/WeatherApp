@@ -65,12 +65,12 @@ fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
         }
 
         constrain(rv_cities) {
-            top.linkTo(searchBar.bottom)
+            top.linkTo(searchBar.bottom, 16.dp)
             bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            width = Dimension.wrapContent
-            height = Dimension.value(700.dp)
+            start.linkTo(parent.start, 16.dp)
+            end.linkTo(parent.end, 16.dp)
+            width = Dimension.fillToConstraints
+            height = Dimension.fillToConstraints
         }
     }
 
@@ -102,6 +102,7 @@ fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
                 LazyColumn(
                     modifier = Modifier
                         .layoutId("rv_cities"),
+
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     items(currentList.size) {
