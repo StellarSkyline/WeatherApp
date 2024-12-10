@@ -2,7 +2,6 @@ package com.example.weatherapp.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -17,6 +16,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.presentation.viewmodel.WeatherViewModel
+import com.example.weatherapp.ui.components.EmptyLayout
 import com.example.weatherapp.ui.components.IncludeSpinner
 import com.example.weatherapp.ui.components.InputText
 import com.example.weatherapp.ui.components.SearchItem
@@ -107,12 +107,25 @@ fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
                     items(searchedCities.size) {
                         SearchItem(
                             item = searchedCities[it]
-                        ){
+                        ) {
                             vm.getCurrentWeather(it)
                             onNavigate(Screen.HomeScreen.route)
                         }
                     }
                 }
+            }
+
+            StateValues.Error -> {
+                EmptyLayout(
+                    modifier = Modifier.layoutId("emptyLocation"),
+                    text = "No City Found"
+                )
+            }
+            StateValues.NoConnectivity -> {
+                EmptyLayout(
+                    modifier = Modifier.layoutId("emptyLocation"),
+                    text = "No Access to Internet"
+                )
             }
         }
 
