@@ -30,6 +30,10 @@ fun HomeScreen(
     val currentLocation by vm.currentLocationState.collectAsStateWithLifecycle()
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     val cityState by vm.cityState.collectAsStateWithLifecycle()
+    val searchedCities by vm.searchedCities.collectAsStateWithLifecycle()
+
+    vm.getSearchCity("Franklin")
+    Log.d("STLog", "Searched Cities in UI: $searchedCities")
 
     //constrain set
     val constraints = ConstraintSet {

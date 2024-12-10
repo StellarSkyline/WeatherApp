@@ -1,6 +1,7 @@
 package com.example.weatherapp.presentation.repo
 
 import android.util.Log
+import com.example.weatherapp.domain.SearchDTO
 import com.example.weatherapp.domain.UserPreferences
 import com.example.weatherapp.domain.WeatherAPI
 import com.example.weatherapp.domain.WeatherDTO
@@ -21,6 +22,18 @@ class WeatherRepoImpl(
             return WeatherDTO(null, null)
         }
     }
+
+    override suspend fun searchCity(city: String): SearchDTO {
+        val response = api.searchCity(city = city)
+        if(response.isSuccessful) {
+            return response.body()!!
+        } else {
+            //return null search DTO
+            Log.d("STLog", "Error: ${response.errorBody()}")
+            return SearchDTO()
+        }
+    }
+
     override suspend fun getItem(key: String): String? = userPreferences.getItem(key)
 
     override suspend fun storeItem(key: String, value: String) {

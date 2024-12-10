@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.domain.Current
 import com.example.weatherapp.domain.Location
+import com.example.weatherapp.domain.SearchDTOItem
 import com.example.weatherapp.domain.WeatherRepo
 import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.utils.ConnectionState
@@ -30,13 +31,16 @@ class WeatherViewModel @Inject constructor(
     val currentLocationState = savedStateHandle.getStateFlow("currentLocationState", Location())
     val uiState = savedStateHandle.getStateFlow("uiState", StateValues.Loading)
     val cityState = savedStateHandle.getStateFlow("cityState", "")
+    val searchedCities = savedStateHandle.getStateFlow("searchedCities", mutableListOf<SearchDTOItem>())
     val savedData = savedStateHandle.getStateFlow("savedData", mutableListOf<String>())
 
     //DataStore Key
     private val key: String = "saved_weather"
 
     //User State handling
-    fun changeCurrentCityState(city: String) { savedStateHandle["cityState"] = city }
+    fun changeCurrentCityState(city: String) {
+        savedStateHandle["cityState"] = city
+    }
 
     //Init - Handle No Network Connection and Check DataStore for location
     init {
@@ -57,7 +61,6 @@ class WeatherViewModel @Inject constructor(
         savedStateHandle["uiState"] = StateValues.Loading
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCurrentWeather(city).let { response ->
-                Log.d("STLog", "Response: ${response.current}")
                 if (response.current != null) {
                     savedStateHandle["currentWeatherState"] = response.current
                     savedStateHandle["currentLocationState"] = response.location
@@ -67,7 +70,24 @@ class WeatherViewModel @Inject constructor(
                     //Show "No City Found Error"
                     savedStateHandle["uiState"] = StateValues.Error
                 }
+            }
+        }
+    }
 
+    fun getSearchCity(city: String) {
+        savedStateHandle["uiState"] = StateValues.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.searchCity(city).let { response ->
+                val list = mutableListOf<SearchDTOItem>()
+                if (response.isNotEmpty()) {
+                    response.forEach {
+                        list.add(it)
+                    }
+                    savedStateHandle["searchedCities"] = list
+                    savedStateHandle["uiState"] = StateValues.Success
+                } else {
+                    savedStateHandle["uiState"] = StateValues.Error
+                }
             }
         }
     }
