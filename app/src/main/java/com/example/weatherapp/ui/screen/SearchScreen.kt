@@ -26,6 +26,7 @@ fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
     //States
     val searchedCities by vm.searchedCities.collectAsStateWithLifecycle()
     val cityState by vm.cityState.collectAsStateWithLifecycle()
+    val currentList by vm.currentList.collectAsStateWithLifecycle()
     val uiState by vm.uiState.collectAsStateWithLifecycle()
 
     //Constraint Sets
@@ -104,9 +105,10 @@ fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
                         .layoutId("rv_cities"),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    items(searchedCities.size) {
+                    items(currentList.size) {
                         SearchItem(
-                            item = searchedCities[it]
+                            item = searchedCities[it],
+                            current = currentList[it].current!!
                         ) {
                             vm.getCurrentWeather(it)
                             onNavigate(Screen.HomeScreen.route)

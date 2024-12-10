@@ -20,15 +20,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.weatherapp.data.ProjectColors
+import com.example.weatherapp.domain.Current
 import com.example.weatherapp.domain.SearchDTOItem
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SearchItem(
     modifier: Modifier = Modifier,
     item: SearchDTOItem = SearchDTOItem(),
+    current: Current = Current(),
     onClick: (String) -> Unit = {}
 ) {
 
@@ -51,16 +58,25 @@ fun SearchItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(text = item.country!!, fontSize = 12.sp, color = ProjectColors.black)
-                Text(text = item.region!!, fontSize = 12.sp, color = ProjectColors.black)
-                Text(text = item.name!!, fontSize = 20.sp, color = ProjectColors.black)
+                Text(text = "${item.country}, ${item.region}", fontSize = 12.sp, color = ProjectColors.black)
+                Text(text = item.name!!, fontSize = 12.sp, color = ProjectColors.black)
+                Text(text = "${current.temp_f.toInt()}°", fontSize = 20.sp, color = ProjectColors.black)
             }
             Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                modifier = Modifier.size(70.dp),
-                imageVector = Icons.Filled.LocationOn,
-                contentDescription = "Location Icon",
-            )
+            Card(
+                modifier = modifier
+                    .height(113.dp)
+                    .width(123.dp)
+            ) {
+                GlideImage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(ProjectColors.secondary_bg),
+                    contentScale = ContentScale.Fit,
+                    model = "https://${current.condition.icon}",
+                    contentDescription = "Weather Icon"
+                )
+            }
         }
     }
 

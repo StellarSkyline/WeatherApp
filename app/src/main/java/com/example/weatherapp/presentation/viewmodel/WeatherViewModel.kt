@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.domain.Current
 import com.example.weatherapp.domain.Location
 import com.example.weatherapp.domain.SearchDTOItem
+import com.example.weatherapp.domain.WeatherDTO
 import com.example.weatherapp.domain.WeatherRepo
 import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.utils.ConnectionState
@@ -32,6 +33,7 @@ class WeatherViewModel @Inject constructor(
     val uiState = savedStateHandle.getStateFlow("uiState", StateValues.Loading)
     val cityState = savedStateHandle.getStateFlow("cityState", "")
     val searchedCities = savedStateHandle.getStateFlow("searchedCities", mutableListOf<SearchDTOItem>())
+    val currentList = savedStateHandle.getStateFlow("currentList", mutableListOf<WeatherDTO>())
     val savedData = savedStateHandle.getStateFlow("savedData", mutableListOf<String>())
 
     //DataStore Key
@@ -84,12 +86,29 @@ class WeatherViewModel @Inject constructor(
                         list.add(it)
                     }
                     savedStateHandle["searchedCities"] = list
+                    getSearchCityCurrent()
                     savedStateHandle["uiState"] = StateValues.Success
+
                 } else {
                     savedStateHandle["uiState"] = StateValues.Error
                 }
             }
         }
+    }
+
+    private fun getSearchCityCurrent() {
+        savedStateHandle["uiState"] = StateValues.Loading
+        val list = mutableListOf<WeatherDTO>()
+        viewModelScope.launch(Dispatchers.IO) {
+            searchedCities.value.forEach {
+                list.add(repo.getCurrentWeather("${it.lat},${it.lon}"))
+            }
+            savedStateHandle["currentList"] = list
+            savedStateHandle["uiState"] = StateValues.Success
+        }
+
+
+
     }
 
     //Check Data Store upon initialization of ViewModel,
