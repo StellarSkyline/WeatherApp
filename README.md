@@ -9,3 +9,8 @@ Technologies Used:
  - Navigation Compose
  - viewModelScope
  - State Flow
+
+**Notes**
+- Compile SDK: 35
+- Min SDK: 34
+- Project tested and ran on a physical Samsung Flip6
