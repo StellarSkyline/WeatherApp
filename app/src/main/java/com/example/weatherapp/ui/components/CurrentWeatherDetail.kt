@@ -59,6 +59,13 @@ fun CurrentWeatherDetail(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "${location.country}, ${location.region}",
+            color = ProjectColors.black,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         Row {
             Text(
                 text = location.name,

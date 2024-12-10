@@ -1,8 +1,10 @@
 package com.example.weatherapp.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -15,31 +17,26 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.presentation.viewmodel.WeatherViewModel
-import com.example.weatherapp.ui.components.CurrentWeatherDetail
-import com.example.weatherapp.ui.components.EmptyLayout
 import com.example.weatherapp.ui.components.IncludeSpinner
 import com.example.weatherapp.ui.components.InputText
+import com.example.weatherapp.ui.components.SearchItem
 
 @Composable
-fun HomeScreen(
-    vm: WeatherViewModel,
-    onNavigate: (String) -> Unit = {}
-) {
+fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
     //States
-    val currentWeather by vm.currentWeatherState.collectAsStateWithLifecycle()
-    val currentLocation by vm.currentLocationState.collectAsStateWithLifecycle()
-    val uiState by vm.uiState.collectAsStateWithLifecycle()
+    val searchedCities by vm.searchedCities.collectAsStateWithLifecycle()
     val cityState by vm.cityState.collectAsStateWithLifecycle()
+    val uiState by vm.uiState.collectAsStateWithLifecycle()
 
-    //constrain set
+    //Constraint Sets
     val constraints = ConstraintSet {
-        //constrain labels
+        //constraint ids
         val searchBar = createRefFor("searchBar")
-        val currentWeather = createRefFor("currentWeather")
         val includeSpinner = createRefFor("includeSpinner")
-        val emptyeLocation = createRefFor("emptyLocation")
+        val emptyLocation = createRefFor("emptyLocation")
+        val rv_cities = createRefFor("rv_cities")
 
-        //constraints
+        //constrains
         constrain(searchBar) {
             top.linkTo(parent.top, 44.dp)
             start.linkTo(parent.start, 24.dp)
@@ -58,7 +55,7 @@ fun HomeScreen(
 
         }
 
-        constrain(emptyeLocation) {
+        constrain(emptyLocation) {
             top.linkTo(searchBar.bottom)
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
@@ -67,14 +64,13 @@ fun HomeScreen(
             height = Dimension.fillToConstraints
         }
 
-        constrain(currentWeather) {
-            top.linkTo(searchBar.bottom, 32.dp)
+        constrain(rv_cities) {
+            top.linkTo(searchBar.bottom)
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-            width = Dimension.fillToConstraints
-            height = Dimension.fillToConstraints
-
+            width = Dimension.wrapContent
+            height = Dimension.wrapContent
         }
     }
 
@@ -84,50 +80,42 @@ fun HomeScreen(
             .background(Color.White),
         constraintSet = constraints
     ) {
+
         InputText(
             modifier = Modifier.layoutId("searchBar"),
             value = cityState,
             enabled = true,
             onAction = {
-                //TODO: Implement Search Query, current Weather should be in different Screen
-                //vm.getCurrentWeather(cityState)
                 vm.getSearchCity(cityState)
-                onNavigate(Screen.SearchScreen.route)
             },
             onValueChanged = {
                 vm.changeCurrentCityState(it)
             }
         )
 
-        //State Module Logic
         when (uiState) {
             StateValues.Loading -> {
                 IncludeSpinner(modifier = Modifier.layoutId("includeSpinner"))
             }
+
             StateValues.Success -> {
-                CurrentWeatherDetail(
-                    modifier = Modifier.layoutId("currentWeather"),
-                    location = currentLocation,
-                    weather = currentWeather
-                )
-            }
-            StateValues.Empty -> {
-                EmptyLayout(
-                    modifier = Modifier.layoutId("emptyLocation")
-                )
-            }
-            StateValues.Error -> {
-                EmptyLayout(
-                    modifier = Modifier.layoutId("emptyLocation"),
-                    text = "No City Found"
-                )
-            }
-            StateValues.NoConnectivity -> {
-                EmptyLayout(
-                    modifier = Modifier.layoutId("emptyLocation"),
-                    text = "No Access to Internet"
-                )
+                LazyColumn(
+                    modifier = Modifier
+                        .layoutId("rv_cities"),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    items(searchedCities.size) {
+                        SearchItem(
+                            item = searchedCities[it]
+                        ){
+                            vm.getCurrentWeather(it)
+                            onNavigate(Screen.HomeScreen.route)
+                        }
+                    }
+                }
             }
         }
+
     }
+
 }

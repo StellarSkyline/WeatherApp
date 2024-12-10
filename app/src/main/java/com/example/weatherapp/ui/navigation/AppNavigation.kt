@@ -10,6 +10,7 @@ import com.example.weatherapp.extension.sharedViewModel
 import com.example.weatherapp.presentation.viewmodel.WeatherViewModel
 import com.example.weatherapp.ui.screen.HomeScreen
 import com.example.weatherapp.ui.screen.Screen
+import com.example.weatherapp.ui.screen.SearchScreen
 
 @Composable
 fun AppNavigation(paddingValues: PaddingValues) {
@@ -26,6 +27,13 @@ fun AppNavigation(paddingValues: PaddingValues) {
                 HomeScreen(vm = viewModel) {
                     navController.navigate(it)
 
+                }
+            }
+
+            composable(route = Screen.SearchScreen.route) { entry ->
+                val viewModel = entry.sharedViewModel<WeatherViewModel>(navController)
+                SearchScreen(vm = viewModel) {
+                    navController.popBackStack(it, false)
                 }
             }
         }
