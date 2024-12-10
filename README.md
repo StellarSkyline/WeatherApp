@@ -2,13 +2,16 @@
 Nooro Technical Assessment
 Technologies Used:
  - Jetpack Compose
+ - Jetpack Compose Constraint Layouts
  - Retrofit
  - Hilt/Hilt View Model
  - Glide
  - DataStore
  - Navigation Compose
  - viewModelScope
+ - Shared ViewModel
  - State Flow
+
 
 **Notes**
 - Compile SDK: 35
