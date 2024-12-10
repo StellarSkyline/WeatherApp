@@ -15,6 +15,7 @@ import com.example.weatherapp.utils.ConnectionState
 import com.example.weatherapp.utils.currentConnectivityState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +33,7 @@ class WeatherViewModel @Inject constructor(
     val currentLocationState = savedStateHandle.getStateFlow("currentLocationState", Location())
     val uiState = savedStateHandle.getStateFlow("uiState", StateValues.Loading)
     val cityState = savedStateHandle.getStateFlow("cityState", "")
-    val searchedCities = savedStateHandle.getStateFlow("searchedCities", mutableListOf<SearchDTOItem>())
+    private val searchedCities = savedStateHandle.getStateFlow("searchedCities", mutableListOf<SearchDTOItem>())
     val currentList = savedStateHandle.getStateFlow("currentList", mutableListOf<WeatherDTO>())
     val savedData = savedStateHandle.getStateFlow("savedData", mutableListOf<String>())
 
@@ -67,9 +68,11 @@ class WeatherViewModel @Inject constructor(
                     savedStateHandle["currentWeatherState"] = response.current
                     savedStateHandle["currentLocationState"] = response.location
                     repo.storeItem(key, city) // Saved to DataStore
+                    delay(2000)
                     savedStateHandle["uiState"] = StateValues.Success
                 } else {
                     //Show "No City Found Error"
+                    delay(2000)
                     savedStateHandle["uiState"] = StateValues.Error
                 }
             }
@@ -87,9 +90,11 @@ class WeatherViewModel @Inject constructor(
                     }
                     savedStateHandle["searchedCities"] = list
                     getSearchCityCurrent()
+                    delay(2000)
                     savedStateHandle["uiState"] = StateValues.Success
 
                 } else {
+                    delay(2000)
                     savedStateHandle["uiState"] = StateValues.Error
                 }
             }
@@ -97,14 +102,12 @@ class WeatherViewModel @Inject constructor(
     }
 
     private fun getSearchCityCurrent() {
-        savedStateHandle["uiState"] = StateValues.Loading
         val list = mutableListOf<WeatherDTO>()
         viewModelScope.launch(Dispatchers.IO) {
             searchedCities.value.forEach {
                 list.add(repo.getCurrentWeather("${it.lat},${it.lon}"))
             }
             savedStateHandle["currentList"] = list
-            savedStateHandle["uiState"] = StateValues.Success
         }
 
 
@@ -121,6 +124,7 @@ class WeatherViewModel @Inject constructor(
                 savedStateHandle["uiState"] = StateValues.Empty
             } else {
                 getCurrentWeather(savedData)
+                delay(2000)
                 savedStateHandle["uiState"] = StateValues.Success
             }
         }

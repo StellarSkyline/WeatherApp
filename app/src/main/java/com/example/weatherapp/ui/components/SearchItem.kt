@@ -28,13 +28,14 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.weatherapp.data.ProjectColors
 import com.example.weatherapp.domain.Current
+import com.example.weatherapp.domain.Location
 import com.example.weatherapp.domain.SearchDTOItem
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SearchItem(
     modifier: Modifier = Modifier,
-    item: SearchDTOItem = SearchDTOItem(),
+    item: Location = Location(),
     current: Current = Current(),
     onClick: (String) -> Unit = {}
 ) {

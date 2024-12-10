@@ -24,7 +24,6 @@ import com.example.weatherapp.ui.components.SearchItem
 @Composable
 fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
     //States
-    val searchedCities by vm.searchedCities.collectAsStateWithLifecycle()
     val cityState by vm.cityState.collectAsStateWithLifecycle()
     val currentList by vm.currentList.collectAsStateWithLifecycle()
     val uiState by vm.uiState.collectAsStateWithLifecycle()
@@ -71,7 +70,7 @@ fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             width = Dimension.wrapContent
-            height = Dimension.wrapContent
+            height = Dimension.value(700.dp)
         }
     }
 
@@ -107,7 +106,7 @@ fun SearchScreen(vm: WeatherViewModel, onNavigate: (String) -> Unit = {}) {
                 ) {
                     items(currentList.size) {
                         SearchItem(
-                            item = searchedCities[it],
+                            item = currentList[it].location!!,
                             current = currentList[it].current!!
                         ) {
                             vm.getCurrentWeather(it)
