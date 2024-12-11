@@ -68,11 +68,11 @@ class WeatherViewModel @Inject constructor(
                     savedStateHandle["currentWeatherState"] = response.current
                     savedStateHandle["currentLocationState"] = response.location
                     repo.storeItem(key, city) // Saved to DataStore
-                    delay(2000)
+                    delay(3000)
                     savedStateHandle["uiState"] = StateValues.Success
                 } else {
                     //Show "No City Found Error"
-                    delay(2000)
+                    delay(3000)
                     savedStateHandle["uiState"] = StateValues.Error
                 }
             }
@@ -90,11 +90,11 @@ class WeatherViewModel @Inject constructor(
                     }
                     savedStateHandle["searchedCities"] = list
                     getSearchCityCurrent()
-                    delay(2000)
+                    delay(3000)
                     savedStateHandle["uiState"] = StateValues.Success
 
                 } else {
-                    delay(2000)
+                    delay(3000)
                     savedStateHandle["uiState"] = StateValues.Error
                 }
             }
@@ -124,7 +124,7 @@ class WeatherViewModel @Inject constructor(
                 savedStateHandle["uiState"] = StateValues.Empty
             } else {
                 getCurrentWeather(savedData)
-                delay(2000)
+                delay(3000)
                 savedStateHandle["uiState"] = StateValues.Success
             }
         }
