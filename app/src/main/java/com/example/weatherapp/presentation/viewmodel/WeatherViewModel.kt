@@ -14,8 +14,11 @@ import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.utils.ConnectionState
 import com.example.weatherapp.utils.currentConnectivityState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,9 +36,16 @@ class WeatherViewModel @Inject constructor(
     val currentLocationState = savedStateHandle.getStateFlow("currentLocationState", Location())
     val uiState = savedStateHandle.getStateFlow("uiState", StateValues.Loading)
     val cityState = savedStateHandle.getStateFlow("cityState", "")
-    private val searchedCities = savedStateHandle.getStateFlow("searchedCities", mutableListOf<SearchDTOItem>())
+    private val searchedCities =
+        savedStateHandle.getStateFlow("searchedCities", mutableListOf<SearchDTOItem>())
     val currentList = savedStateHandle.getStateFlow("currentList", mutableListOf<WeatherDTO>())
-    val savedData = savedStateHandle.getStateFlow("savedData", mutableListOf<String>())
+
+    //channel
+    private val channel = Channel<Job>(2).apply {
+        viewModelScope.launch(Dispatchers.IO) {
+            consumeEach { it.join() }
+        }
+    }
 
     //DataStore Key
     private val key: String = "saved_weather"
@@ -68,50 +78,51 @@ class WeatherViewModel @Inject constructor(
                     savedStateHandle["currentWeatherState"] = response.current
                     savedStateHandle["currentLocationState"] = response.location
                     repo.storeItem(key, city) // Saved to DataStore
-                    delay(3000)
                     savedStateHandle["uiState"] = StateValues.Success
                 } else {
                     //Show "No City Found Error"
-                    delay(3000)
                     savedStateHandle["uiState"] = StateValues.Error
                 }
             }
         }
+
     }
 
     fun getSearchCity(city: String) {
+        //Set uiState to Loading
         savedStateHandle["uiState"] = StateValues.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.searchCity(city).let { response ->
-                val list = mutableListOf<SearchDTOItem>()
-                if (response.isNotEmpty()) {
-                    response.forEach {
-                        list.add(it)
+
+        //Create first network call, search for cities and save to savedStateHandle
+        val searchJob =
+            viewModelScope.launch(context = Dispatchers.IO, start = CoroutineStart.LAZY) {
+                repo.searchCity(city).let { response ->
+                    val list = mutableListOf<SearchDTOItem>()
+                    repo.searchCity(city).let { response ->
+                        if (response.isNotEmpty()) response.forEach { list.add(it) }
+                        else savedStateHandle["uiState"] = StateValues.Error
                     }
                     savedStateHandle["searchedCities"] = list
-                    getSearchCityCurrent()
-                    delay(3000)
-                    savedStateHandle["uiState"] = StateValues.Success
-
-                } else {
-                    delay(3000)
-                    savedStateHandle["uiState"] = StateValues.Error
                 }
             }
-        }
-    }
 
-    private fun getSearchCityCurrent() {
-        val list = mutableListOf<WeatherDTO>()
-        viewModelScope.launch(Dispatchers.IO) {
-            searchedCities.value.forEach {
-                list.add(repo.getCurrentWeather("${it.lat},${it.lon}"))
+        //use saved searched cities in the getCurrentWeather using lat long to be more precise
+        val getCurrentCityJob =
+            viewModelScope.launch(context = Dispatchers.IO, start = CoroutineStart.LAZY) {
+                val list = mutableListOf<WeatherDTO>()
+                searchedCities.value.forEach {
+                    list.add(repo.getCurrentWeather("${it.lat},${it.lon}"))
+                }
+                if (list.isEmpty()) {
+                    savedStateHandle["uiState"] = StateValues.Error
+                } else {
+                    savedStateHandle["currentList"] = list
+                    savedStateHandle["uiState"] = StateValues.Success
+                }
+
             }
-            savedStateHandle["currentList"] = list
-        }
-
-
-
+        //add jobs to channel
+        channel.trySend(searchJob)
+        channel.trySend(getCurrentCityJob)
     }
 
     //Check Data Store upon initialization of ViewModel,
@@ -124,7 +135,6 @@ class WeatherViewModel @Inject constructor(
                 savedStateHandle["uiState"] = StateValues.Empty
             } else {
                 getCurrentWeather(savedData)
-                delay(3000)
                 savedStateHandle["uiState"] = StateValues.Success
             }
         }
