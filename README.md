@@ -1,5 +1,5 @@
 **Simple Weather App**
-Nooro Technical Assessment
+
 Technologies Used:
  - Jetpack Compose
  - Jetpack Compose Constraint Layouts
