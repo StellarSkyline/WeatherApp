@@ -19,17 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.example.weatherapp.data.ProjectColors
 import com.example.weatherapp.domain.Current
 import com.example.weatherapp.domain.Location
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CurrentWeatherDetail(
     modifier: Modifier = Modifier,
@@ -48,12 +44,10 @@ fun CurrentWeatherDetail(
                 .height(113.dp)
                 .width(123.dp)
         ) {
-            GlideImage(
-                modifier = Modifier
-                    .fillMaxSize()
+            CoilLoader(
+                modifier = Modifier.fillMaxSize()
                     .background(Color.White),
-                contentScale = ContentScale.Fit,
-                model = "https://${weather.condition.icon}",
+                imageUrl = "https://${weather.condition.icon}",
                 contentDescription = "Weather Icon"
             )
         }
