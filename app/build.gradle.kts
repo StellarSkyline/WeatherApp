@@ -20,6 +20,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.weatherapp.CustomTestRunner"
     }
 
     buildTypes {
@@ -41,6 +42,7 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
@@ -49,8 +51,10 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation(libs.core)
+    testImplementation(libs.junit.junit)
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     //HiltViewModel
     kapt("androidx.hilt:hilt-compiler:1.0.0-alpha03")
 
@@ -79,6 +83,27 @@ dependencies {
     //Channels
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
+    //Hilt Testing
+    // For Robolectric tests.
+    testImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.51.1")
+
+
+    // For instrumented tests.
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.51.1")
+
+
+
+    testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
+    testImplementation("org.mockito:mockito-core:5.6.0") // Replace with the latest version if needed
+    // or for Kotlin users:
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0") // for Kotlin-specific Mockito extensions
+
+    // If you're using Mockito with Android instrumented tests, add this:
+    androidTestImplementation("org.mockito:mockito-android:5.6.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -87,7 +112,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

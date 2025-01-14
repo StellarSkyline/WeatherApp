@@ -36,7 +36,7 @@ class WeatherViewModel @Inject constructor(
     val currentLocationState = savedStateHandle.getStateFlow("currentLocationState", Location())
     val uiState = savedStateHandle.getStateFlow("uiState", StateValues.Loading)
     val cityState = savedStateHandle.getStateFlow("cityState", "")
-    private val searchedCities =
+    val searchedCities =
         savedStateHandle.getStateFlow("searchedCities", mutableListOf<SearchDTOItem>())
     val currentList = savedStateHandle.getStateFlow("currentList", mutableListOf<WeatherDTO>())
 
@@ -55,8 +55,12 @@ class WeatherViewModel @Inject constructor(
         savedStateHandle["cityState"] = city
     }
 
-    //Init - Handle No Network Connection and Check DataStore for location
-    init {
+
+
+
+
+    //Function Calls
+    fun checkConnectivity() {
         Log.d("STLog", "${app.currentConnectivityState}")
         when (app.currentConnectivityState) {
             ConnectionState.Available -> {
@@ -69,7 +73,6 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    //Function Calls
     fun getCurrentWeather(city: String) {
         savedStateHandle["uiState"] = StateValues.Loading
         viewModelScope.launch(Dispatchers.IO) {
@@ -127,7 +130,7 @@ class WeatherViewModel @Inject constructor(
 
     //Check Data Store upon initialization of ViewModel,
     // if there's an item immediately call getCurrentWeather() api call
-    private fun checkDataStore() {
+     fun checkDataStore() {
         viewModelScope.launch(Dispatchers.IO) {
             val savedData = repo.getItem(key)
             Log.d("STLog", "Saved Data: $savedData")
