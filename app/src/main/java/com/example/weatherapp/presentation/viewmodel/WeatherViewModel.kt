@@ -2,6 +2,7 @@ package com.example.weatherapp.presentation.viewmodel
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,8 +30,6 @@ class WeatherViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    //TODO: Add Search API Functionality
-
     //UI States
     val currentWeatherState = savedStateHandle.getStateFlow("currentWeatherState", Current())
     val currentLocationState = savedStateHandle.getStateFlow("currentLocationState", Location())
@@ -55,23 +54,18 @@ class WeatherViewModel @Inject constructor(
         savedStateHandle["cityState"] = city
     }
 
-
-
-
-
-    //Function Calls
     fun checkConnectivity() {
         Log.d("STLog", "${app.currentConnectivityState}")
         when (app.currentConnectivityState) {
             ConnectionState.Available -> {
                 checkDataStore()
             }
-
             ConnectionState.Unavailable -> {
                 savedStateHandle["uiState"] = StateValues.NoConnectivity
             }
         }
     }
+
 
     fun getCurrentWeather(city: String) {
         savedStateHandle["uiState"] = StateValues.Loading

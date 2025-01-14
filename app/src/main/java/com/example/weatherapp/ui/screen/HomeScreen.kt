@@ -100,11 +100,6 @@ fun HomeScreen(
             }
         )
 
-        //Check for connectivity
-        LaunchedEffect(Unit) {
-            vm.checkConnectivity()
-        }
-
         //State Module Logic
         when (uiState) {
             StateValues.Loading -> {

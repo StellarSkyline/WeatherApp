@@ -24,6 +24,7 @@ fun AppNavigation(paddingValues: PaddingValues) {
         ) {
             composable(route = Screen.HomeScreen.route) { entry ->
                 val viewModel = entry.sharedViewModel<WeatherViewModel>(navController)
+                viewModel.checkConnectivity()
                 HomeScreen(vm = viewModel) {
                     navController.navigate(it)
 
