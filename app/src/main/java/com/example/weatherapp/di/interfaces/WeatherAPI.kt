@@ -1,6 +1,8 @@
-package com.example.weatherapp.domain
+package com.example.weatherapp.di.interfaces
 
 import com.example.weatherapp.data.ApiKey
+import com.example.weatherapp.domain.SearchDTO
+import com.example.weatherapp.domain.WeatherDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

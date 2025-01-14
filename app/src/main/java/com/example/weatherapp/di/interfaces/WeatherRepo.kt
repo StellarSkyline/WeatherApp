@@ -1,4 +1,7 @@
-package com.example.weatherapp.domain
+package com.example.weatherapp.di.interfaces
+
+import com.example.weatherapp.domain.SearchDTO
+import com.example.weatherapp.domain.WeatherDTO
 
 interface WeatherRepo {
     suspend fun getCurrentWeather(city: String): WeatherDTO

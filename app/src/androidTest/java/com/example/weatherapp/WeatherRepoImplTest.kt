@@ -2,9 +2,9 @@ package com.example.weatherapp
 
 import com.example.weatherapp.domain.SearchDTO
 import com.example.weatherapp.domain.SearchDTOItem
-import com.example.weatherapp.domain.UserPreferences
-import com.example.weatherapp.domain.WeatherAPI
-import com.example.weatherapp.presentation.repo.WeatherRepoImpl
+import com.example.weatherapp.di.interfaces.UserPreferences
+import com.example.weatherapp.di.interfaces.WeatherAPI
+import com.example.weatherapp.domain.repo.WeatherRepoImpl
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
 import org.junit.Test

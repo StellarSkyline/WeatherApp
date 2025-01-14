@@ -2,11 +2,11 @@ package com.example.weatherapp.di
 
 import android.content.Context
 import com.example.weatherapp.data.BaseValues
-import com.example.weatherapp.domain.UserPreferences
-import com.example.weatherapp.domain.WeatherAPI
-import com.example.weatherapp.domain.WeatherRepo
-import com.example.weatherapp.presentation.repo.UserPreferencesImpl
-import com.example.weatherapp.presentation.repo.WeatherRepoImpl
+import com.example.weatherapp.di.interfaces.UserPreferences
+import com.example.weatherapp.di.interfaces.WeatherAPI
+import com.example.weatherapp.di.interfaces.WeatherRepo
+import com.example.weatherapp.domain.repo.UserPreferencesImpl
+import com.example.weatherapp.domain.repo.WeatherRepoImpl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides

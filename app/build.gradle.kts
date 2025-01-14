@@ -89,19 +89,13 @@ dependencies {
     kaptTest("com.google.dagger:hilt-android-compiler:2.51.1")
 
 
-    // For instrumented tests.
+    // Testing Libraries
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.51.1")
-
-
-
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
-    testImplementation("org.mockito:mockito-core:5.6.0") // Replace with the latest version if needed
-    // or for Kotlin users:
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0") // for Kotlin-specific Mockito extensions
-
-    // If you're using Mockito with Android instrumented tests, add this:
+    testImplementation("org.mockito:mockito-core:5.6.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
     androidTestImplementation("org.mockito:mockito-android:5.6.0")
 
     implementation(libs.androidx.core.ktx)

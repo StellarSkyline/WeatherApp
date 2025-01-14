@@ -1,4 +1,4 @@
-package com.example.weatherapp.domain
+package com.example.weatherapp.di.interfaces
 
 interface UserPreferences {
     suspend fun saveItem(key:String, value:String)

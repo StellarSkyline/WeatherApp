@@ -2,7 +2,7 @@ package com.example.weatherapp
 
 import android.app.Application
 import androidx.lifecycle.SavedStateHandle
-import com.example.weatherapp.domain.WeatherRepo
+import com.example.weatherapp.di.interfaces.WeatherRepo
 import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.presentation.viewmodel.WeatherViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

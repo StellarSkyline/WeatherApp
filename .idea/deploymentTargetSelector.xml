@@ -8,10 +8,19 @@
       <SelectionState runConfigName="WeatherViewModelTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="someTest()">
+      <SelectionState runConfigName="checkDataStoreTest()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="checkDataStoreTest()">
+      <SelectionState runConfigName="WeatherRepoImplTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="success get search city()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="get search city failure()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Default State Test()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -1,11 +1,11 @@
-package com.example.weatherapp.presentation.repo
+package com.example.weatherapp.domain.repo
 
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.weatherapp.domain.UserPreferences
+import com.example.weatherapp.di.interfaces.UserPreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 

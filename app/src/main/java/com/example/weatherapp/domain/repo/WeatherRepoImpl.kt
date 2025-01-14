@@ -1,11 +1,11 @@
-package com.example.weatherapp.presentation.repo
+package com.example.weatherapp.domain.repo
 
 import android.util.Log
 import com.example.weatherapp.domain.SearchDTO
-import com.example.weatherapp.domain.UserPreferences
-import com.example.weatherapp.domain.WeatherAPI
+import com.example.weatherapp.di.interfaces.UserPreferences
+import com.example.weatherapp.di.interfaces.WeatherAPI
 import com.example.weatherapp.domain.WeatherDTO
-import com.example.weatherapp.domain.WeatherRepo
+import com.example.weatherapp.di.interfaces.WeatherRepo
 
 class WeatherRepoImpl(
     private val api: WeatherAPI,

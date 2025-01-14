@@ -2,7 +2,6 @@ package com.example.weatherapp.presentation.viewmodel
 
 import android.app.Application
 import android.util.Log
-import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +9,7 @@ import com.example.weatherapp.domain.Current
 import com.example.weatherapp.domain.Location
 import com.example.weatherapp.domain.SearchDTOItem
 import com.example.weatherapp.domain.WeatherDTO
-import com.example.weatherapp.domain.WeatherRepo
+import com.example.weatherapp.di.interfaces.WeatherRepo
 import com.example.weatherapp.presentation.states.StateValues
 import com.example.weatherapp.utils.ConnectionState
 import com.example.weatherapp.utils.currentConnectivityState
