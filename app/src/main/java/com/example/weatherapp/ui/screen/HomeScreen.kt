@@ -90,8 +90,7 @@ fun HomeScreen(
             value = cityState,
             enabled = true,
             onAction = {
-                //TODO: Implement Search Query, current Weather should be in different Screen
-                //vm.getCurrentWeather(cityState)
+
                 vm.getSearchCity(cityState)
                 onNavigate(Screen.SearchScreen.route)
             },

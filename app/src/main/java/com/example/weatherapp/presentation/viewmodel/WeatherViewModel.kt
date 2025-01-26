@@ -84,7 +84,7 @@ class WeatherViewModel @Inject constructor(
 
     }
 
-    fun getSearchCity(city: String) {
+    fun  getSearchCity(city: String) {
         //Set uiState to Loading
         savedStateHandle["uiState"] = StateValues.Loading
 

@@ -1,7 +1,5 @@
 package com.example.weatherapp
 
-import com.example.weatherapp.domain.SearchDTO
-import com.example.weatherapp.domain.SearchDTOItem
 import com.example.weatherapp.di.interfaces.UserPreferences
 import com.example.weatherapp.di.interfaces.WeatherAPI
 import com.example.weatherapp.domain.repo.WeatherRepoImpl
@@ -21,7 +19,7 @@ class WeatherRepoImplTest {
     @Test
     fun `success get search city`() = runTest {
         `when`(api.searchCity(city = "London"))
-            .thenReturn(Response.success(200, FakeSearchDTO()))
+            .thenReturn(Response.success(200, FakeResponses().FakeSearchDTO()))
         val response = repo.searchCity("London")
         assert(response[0].name == "London")
 
@@ -36,19 +34,3 @@ class WeatherRepoImplTest {
 
 }
 
-fun FakeSearchDTO(): SearchDTO {
-    val data: ArrayList<SearchDTOItem> = arrayListOf(
-        SearchDTOItem(
-            country = "UK",
-            id = 0,
-            lat = 0.0,
-            lon = 0.0,
-            name = "London",
-            region = "London",
-            url = "London"
-        )
-    )
-    return SearchDTO().apply {
-        addAll(data)
-    }
-}
