@@ -1,4 +1,4 @@
-**Simple Weather App**
+**Simple Native Android Weather App**
 
 Technologies Used:
  - Jetpack Compose
